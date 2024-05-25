@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .reddit-sans{
+            font-family: "Reddit Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+          }
+  </style>
+  <script>
+    // Wrap your JavaScript code inside a function
+    function initialize() {
+      document.getElementById('logoButton').onclick = function() {
+        window.location.href = 'home.html';
+      };
+    }
+
+    // Call the initialize function after the DOM is loaded
+    document.addEventListener('DOMContentLoaded', initialize);
+  </script>
+</head>
+<body class="bg-blue-900 text-white h-screen">
+  <div class="flex h-full">
+    <!-- Side Navigation Bar -->
+    <div class="bg-gray-800 text-white w-64 h-full flex flex-col justify-between">
+      <div>
+        <!-- Header -->
+        <div class="p-4">
+            <img src="haiku_logo_white.svg" alt="Haiku Logo" class="w-32 mx-auto cursor-pointer" id="logoButton">
+        </div>
+        <!-- Navigation Links -->
+        <nav class="p-4">
+          <ul>
+            <li><a href="command.html" class="block py-4 hover:bg-gray-700 rounded">BasicCommands</a></li>
+            <li><a href="system_calls.html" class="block py-4 hover:bg-gray-700 rounded">System Call</a></li>
+            <li><a href="scheduling_algorithm.html" class="block py-4 hover:bg-gray-700 rounded">Scheduling Algorithm</a></li>
+            <li><a href="memory_allocation.html" class="block py-4 hover:bg-gray-700 rounded">Memory Allocation</a></li>
+            <li><a href="process.html" class="block py-4 hover:bg-gray-700 rounded">Process Synchronization</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+      
+    <!-- Main Content -->
+    <div class="flex-1 p-10 glass-effect overflow-y-auto">
+      <div class="text-center mb-10">
+        <h1 class="font-bold text-5xl mb-6 reddit-sans">Haiku: The BeOS-Inspired Open-Source Desktop OS Explained</h1>
+        <h2 class="text-2xl mb-4 reddit-sans">What is Haiku OS?</h2>
+        <p class="mb-8 ">Haiku is an open-source operating system under constant development. Specifically targeting personal computing, Haiku is a fast, efficient, simple to use, easy to learn, and yet very powerful system for computer users of all levels. Additionally, Haiku offers something over other open-source platforms which is quite unique: The project consists of a single team writing everything from the kernel, drivers, userland services, toolkit, and graphics stack to the included desktop applications and preflets. While numerous open-source projects are utilized in Haiku, they are integrated seamlessly. This allows Haiku to achieve a unique level of consistency that provides many conveniences, and is truly enjoyable to use by both end-users and developers alike.</p>
+      </div>
+      
+      <div class="mb-8 ">
+        <h2 class="text-2xl mb-4 reddit-sans">What’s so good about Haiku anyway?</h2>
+        <p>The key highlights that distinguish Haiku from other operating systems include:</p>
+        <ul class="list-disc list-inside pl-4">
+          <li>Specific focus on personal computing</li>
+          <li>Custom kernel designed for responsiveness</li>
+          <li>Fully threaded design for great efficiency with multi-processor/core CPUs</li>
+          <li>Rich object-oriented API for faster development</li>
+          <li>Database-like file system (BFS) with support for indexed metadata</li>
+          <li>Unified, cohesive interface</li>
+        </ul>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl mb-4 reddit-sans">Features</h2>
+        <ul class="list-disc list-inside pl-4">
+          <li>Modular Design: Haiku OS is built with a modular architecture, allowing for easy customization and scalability.</li>
+          <li>BeFS File System: It utilizes the Be File System (BeFS), offering advanced features such as journaling and metadata support.</li>
+          <li>Lightweight: Haiku OS is designed to be lightweight and efficient, making it suitable for both desktop and embedded systems.</li>
+          <li>User-Friendly Interface: It provides a user-friendly graphical interface, making it accessible to users with varying levels of technical expertise.</li>
+          <li>Compatibility Layer: Haiku OS includes a compatibility layer for running applications originally developed for BeOS.</li>
+        </ul>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl mb-4 reddit-sans">Advantages</h2>
+        <ul class="list-disc list-inside pl-4">
+          <li>Open Source: Haiku OS is open source, allowing for community contributions and continuous improvement.</li>
+          <li>Fast Boot Times: It boasts fast boot times, enabling quick startup and system responsiveness.</li>
+          <li>Stability: Due to its modular design and streamlined architecture, Haiku OS is known for its stability and reliability.</li>
+          <li>Developer-Friendly: It provides a development environment with comprehensive documentation and tools for building applications.</li>
+          <li>Small Footprint: Haiku OS has a small footprint, consuming minimal system resources and allowing it to run efficiently on older hardware.</li>
+        </ul>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl mb-4 reddit-sans">Disadvantages</h2>
+        <ul class="list-disc list-inside pl-4">
+          <li>Limited Hardware Support: Haiku OS may have limited hardware support compared to more mainstream operating systems, particularly for newer hardware components.</li>
+          <li>Software Availability: While Haiku OS includes a compatibility layer for running BeOS applications, its software ecosystem may not be as extensive as those of other operating systems.</li>
+          <li>Community Size: The community around Haiku OS is relatively small compared to larger operating systems, which may impact the availability of support and third-party applications.</li>
+          <li>Lack of Enterprise Adoption: Haiku OS is primarily targeted at desktop and enthusiast users, and it may not be widely adopted in enterprise environments.</li>
+          <li>Driver Support: While Haiku OS includes drivers for many common hardware components, support for some specialized or newer devices may be lacking.</li>
+        </ul>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl mb-4 reddit-sans">Commands</h2>
+        <ul class="list-disc list-inside pl-4">
+          <li>Terminal Commands: Haiku OS provides a set of terminal commands for performing various tasks, such as file management, process control, and system configuration.</li>
+          <li>Package Management: Commands for package management allow users to install, update, and remove software packages from the system.</li>
+          <li>Networking: Haiku OS includes commands for configuring and managing network interfaces, connecting to networks, and troubleshooting network issues.</li>
+          <li>System Administration: Commands for system administration tasks, such as user management, disk partitioning, and system monitoring, are available in Haiku OS.</li>
+        </ul>
+      </div>
+      
+      <div>
+        <h2 class="text-2xl mb-4 reddit-sans">System Calls</h2>
+        <ul class="list-disc list-inside pl-4">
+          <li>File System Operations: System calls for file system operations allow applications to read, write, and manipulate files and directories on the file system.</li>
+          <li>Process Management: Haiku OS provides system calls for creating, terminating, and managing processes, as well as for inter-process communication.</li>
+          <li>Memory Management: System calls for memory management enable applications to allocate and deallocate memory, as well as to map memory regions.</li>
+          <li>Device Access: Haiku OS supports system calls for accessing hardware devices, such as disk drives, network interfaces, and input/output devices.</li>
+          <li>Synchronization and IPC: System calls for synchronization and inter-process communication facilitate coordination and data exchange between concurrent processes.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

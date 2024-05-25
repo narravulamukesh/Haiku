@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Commands in Haiku OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark-blue-container {
+            background-color: #1E3A8A; /* Dark blue color */
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .reddit-sans{
+            font-family: "Reddit Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+          }
+    </style>
+    <script>
+        // Wrap your JavaScript code inside a function
+        function initialize() {
+          document.getElementById('logoButton').onclick = function() {
+            window.location.href = 'home.html';
+          };
+        }
+    
+        // Call the initialize function after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', initialize);
+
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // to deselect
+            alert("Code copied to clipboard!");
+        }
+      </script>
+</head>
+<body class="bg-blue-900 text-white h-screen">
+    <div class="flex h-full">
+        <!-- Side Navigation Bar -->
+        <div class="bg-gray-800 text-white w-64 h-full flex flex-col justify-between">
+            <div>
+                <!-- Header -->
+                <div class="p-4">
+                    <img src="haiku_logo_white.svg" alt="Haiku Logo" class="w-32 mx-auto cursor-pointer" id="logoButton">
+                </div>
+                <!-- Navigation Links -->
+                <nav class="p-4">
+                    <ul>
+                        <li><a href="command.html" class="block py-4 hover:bg-gray-700 rounded">Basic Commands</a></li>
+                        <li><a href="system_calls.html" class="block py-4 hover:bg-gray-700 rounded">System Call</a></li>
+                        <li><a href="scheduling_algorithm.html" class="block py-4 hover:bg-gray-700 rounded">Scheduling Algorithm</a></li>
+                        <li><a href="memory_allocation.html" class="block py-4 hover:bg-gray-700 rounded">Memory Allocation</a></li>
+                        <li><a href="process.html" class="block py-4 hover:bg-gray-700 rounded">Process Synchronization</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10 glass-effect overflow-y-auto">
+            <div class="text-center mb-10">
+                <h1 class="font-bold text-5xl mb-6 reddit-sans">Basic Commands in Haiku OS</h1>
+                <hr>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="bg-gray-900 p-4 rounded-md mb-10">
+                <h2 class="text-3xl mb-4">File Management</h2>
+                <p>List of common file management commands:</p>
+                <ul class="list-disc pl-6">
+                    <li>ls: Lists the contents of a directory.</li>
+                    <li>cp: Copies files or directories.</li>
+                    <li>mv: Moves or renames files or directories.</li>
+                    <li>rm: Removes files or directories.</li>
+                    <li>mkdir: Creates a new directory.</li>
+                    <li>rmdir: Removes an empty directory.</li>
+                    <li>cat: Concatenates and displays file content.</li>
+                    <li>less: Views file content one screen at a time.</li>
+                    <li>touch: Updates the access and modification times of a file, or creates a new empty file.</li>
+                    <li>find: Searches for files in a directory hierarchy.</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-md mb-10">
+                <h2 class="text-3xl mb-4">Package Management</h2>
+                <p>List of package management commands:</p>
+                <ul class="list-disc pl-6">
+                    <li>pkgman install : Installs a specified package.</li>
+                    <li>pkgman update: Updates all installed packages to their latest versions.</li>
+                    <li>pkgman uninstall : Removes a specified package.</li>
+                    <li>pkgman list: Lists all installed packages.</li>
+                    <li>pkgman search : Searches for packages related to the query.</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-md mb-10">
+                <h2 class="text-3xl mb-4">Networking</h2>
+                <p>List of networking commands:</p>
+                <ul class="list-disc pl-6">
+                    <li>ifconfig: Configures network interfaces.</li>
+                    <li>ping : Sends ICMP ECHO_REQUEST packets to network hosts.</li>
+                    <li>traceroute : Prints the route packets take to the network host.</li>
+                    <li>ssh : Connects to a remote host via SSH.</li>
+                    <li>wget : Downloads files from the web.</li>
+                    <li>curl : Transfers data from or to a server.</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-md mb-10">
+                <h2 class="text-3xl mb-4">System Administration</h2>
+                <p>List of system administration commands:</p>
+                <ul class="list-disc pl-6">
+                    <li>useradd : Adds a new user.</li>
+                    <li>passwd : Changes the password for a user.</li>
+                    <li>mount : Mounts a file system.</li>
+                    <li>umount : Unmounts a file system.</li>
+                    <li>df: Displays disk space usage.</li>
+                    <li>top: Displays system tasks and resource usage.</li>
+                    <li>ps: Displays information about running processes.</li>
+                    <li>kill : Terminates a process by its process ID.</li>
+                    <li>fdisk: Manipulates disk partition table.</li>
+                    <li>reboot: Reboots the system.</li>
+                    <li>shutdown: Powers off or reboots the system.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

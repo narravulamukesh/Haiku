@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Device with Semaphore</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .reddit-sans{
+            font-family: "Reddit Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+          }
+
+    </style>
+</head>
+<body class="bg-blue-900 text-white h-screen">
+    <div class="flex h-full">
+        <!-- Side Navigation Bar -->
+        <div class="bg-gray-800 text-white w-64 h-full flex flex-col justify-between">
+            <div>
+                <!-- Header -->
+                <div class="p-4">
+                    <img src="haiku_logo_white.svg" alt="Haiku Logo" class="w-32 mx-auto cursor-pointer" id="logoButton">
+                </div>
+                <!-- Navigation Links -->
+                <nav class="p-4">
+                    <ul>
+                        <li><a href="command.html" class="block py-4 hover:bg-gray-700 rounded">Basic Commands</a></li>
+                        <li><a href="system_calls.html" class="block py-4 hover:bg-gray-700 rounded">System Call</a></li>
+                        <li><a href="scheduling_algorithm.html" class="block py-4 hover:bg-gray-700 rounded">Scheduling Algorithm</a></li>
+                        <li><a href="memory_allocation.html" class="block py-4 hover:bg-gray-700 rounded">Memory Allocation</a></li>
+                        <li><a href="process.html" class="block py-4 hover:bg-gray-700 rounded">Process Synchronization</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10 glass-effect overflow-y-auto">
+            <div class="text-center mb-10">
+                <h1 class="font-bold text-5xl mb-6 reddit-sans">Process Synchronization in Power Management System</h1>
+                <hr>
+            </div>
+
+            <!-- Content Section -->
+            <div class="mb-10">
+                <h2 class="text-4xl mb-5 reddit-sans">Problem Statement:</h2>
+                <p class="text-2xl mb-3 reddit-sans">In a smart home environment, efficient management of power-consuming devices is crucial to 
+                    avoid overloading the electrical system and to ensure optimal power usage. Running more than one High-power consuming devices causes shortage of power.
+                    High-power consuming devices and low-power consuming devices need to be managed such that power consumption is regulated and the system remains stable.</p>
+
+                <div class="relative">
+                    <pre class="bg-gray-900 p-4 rounded-md text-left">
+<code id="code4">#include <stdio.h>
+    #include <semaphore.h>
+    #include <pthread.h>
+    #include <unistd.h>
+    
+    void *on(void *arg);
+    void *off(void *arg);
+    float wat = 7;
+    sem_t s;
+    
+    int main() {
+        int ch;
+        sem_init(&s, 0, 1); // Initialize semaphore to 1
+        pthread_t p1, p2;
+        int flag=0;
+     
+        while (1) {
+            printf("Enter Your choice: \n a) 1 to turn on a high power consuming device.\n
+             b) 2 to turn off high power consuming device. \n 
+             c) 3 to turn on low power.\n 
+             d) 4 to turn off low power.\n
+             e) 5 to exit.\n ");
+            if (scanf("%d", &ch) != 1) {
+                printf("Invalid input. Please enter a number...\n");
+                while (getchar() != '\n'); // Clear invalid input
+                continue;
+            }
+    
+            if (ch == 1) {
+                if (sem_trywait(&s) == 0) { // Check if semaphore is available
+                    pthread_create(&p1, NULL, on, NULL);
+                    pthread_join(p1, NULL);
+                } else {
+                    printf("One high power consuming device is already running...\n");
+                }
+            } else if (ch == 2) {
+                if (sem_trywait(&s) == -1) { // Check if semaphore is unavailable
+                    pthread_create(&p2, NULL, off, NULL);
+                    pthread_join(p2, NULL);
+                } else {
+                    printf("No high power consuming device is currently running...\n");
+                    sem_post(&s); // Restore the semaphore state
+                }
+            } else if (ch == 3) {
+                wat -= 0.15;
+                printf("Low power consuming device is currently running...\n");
+                printf("Remaining power: %.2f\n", wat);
+                flag=1;
+            } else if (ch == 4) {
+                if (flag==1){
+                    wat += 0.15;
+                    printf("Low power consuming device stoped running...\n");
+                    printf("Remaining power: %.2f\n", wat);
+                    flag = 0;
+                }
+                else{
+                    printf("No low power consuming device is running");
+                }
+                
+            } else if (ch == 5) {
+                break;
+            } else {
+                printf("Invalid choice. Please enter 1, 2, 3, 4, or 5.\n");
+            }
+        }
+    
+        // Destroy semaphore
+        sem_destroy(&s);
+    
+        return 0;
+    }
+    
+    void *on(void *arg) {
+        float x = wat;
+        x -= 3.5;
+        wat = x;
+        printf("Watt(in kw) after the device running: %.2f\n", wat);
+        return NULL;
+    }
+    
+    void *off(void *arg) { 
+        float y = wat;
+        y += 3.5;
+        wat = y;
+        printf("Watt(in kw) after the device stoped running: %.2f\n", wat);
+        sem_post(&s); // Release semaphore after turning off
+        return NULL;
+    }</code>
+                    </pre>
+                    <h1 class="font-bold text-5xl mb-4 reddit-sans">Output:</h1>
+                    <img src="output.jpeg">
+                    <button onclick="copyCode('code4')" class="absolute top-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Copy</button>
+                </div>
+            </div>
+
+            <!-- Compiler Section -->
+            <div>
+                <h2 class="text-4xl mb-5 reddit-sans">DEMO:</h2>
+                <iframe src="https://www.onlinegdb.com/NwN3LY33e" class="w-full h-screen"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // to deselect
+            alert("Code copied to clipboard!");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Calls in Haiku OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+            .reddit-sans{
+              font-family: "Reddit Sans", sans-serif;
+              font-optical-sizing: auto;
+              font-weight: 700;
+              font-style: normal;
+            }
+    </style>
+    <script>
+        // Wrap your JavaScript code inside a function
+        function initialize() {
+            document.getElementById('logoButton').onclick = function() {
+                window.location.href = 'home.html';
+            };
+        }
+
+        // Call the initialize function after the DOM is loaded
+        document.addEventListener('DOMContentLoaded', initialize);
+
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // to deselect
+            alert("Code copied to clipboard!");
+        }
+    </script>
+</head>
+<body class="bg-blue-900 text-white h-screen">
+    <div class="flex h-full">
+        <!-- Side Navigation Bar -->
+        <div class="bg-gray-800 text-white w-64 h-full flex flex-col justify-between">
+            <div>
+                <!-- Header -->
+                <div class="p-4">
+                    <img src="haiku_logo_white.svg" alt="Haiku Logo" class="w-32 mx-auto cursor-pointer" id="logoButton">
+                </div>
+                <!-- Navigation Links -->
+                <nav class="p-4">
+                    <ul>
+                        <li><a href="command.html" class="block py-4 hover:bg-gray-700 rounded">Basic Commands</a></li>
+                        <li><a href="system_calls.html" class="block py-4 hover:bg-gray-700 rounded">System Call</a></li>
+                        <li><a href="scheduling_algorithm.html" class="block py-4 hover:bg-gray-700 rounded">Scheduling Algorithm</a></li>
+                        <li><a href="memory_allocation.html" class="block py-4 hover:bg-gray-700 rounded">Memory Allocation</a></li>
+                        <li><a href="process.html" class="block py-4 hover:bg-gray-700 rounded">Process Synchronization</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10 glass-effect overflow-y-auto">
+            <div class="text-center mb-10">
+                <h1 class="font-bold text-5xl mb-6 reddit-sans">System Calls in Haiku OS</h1>
+                <hr>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="mb-10">
+                <h2 class="text-3xl mb-4 reddit-sans">Example of open and close</h2>
+                <div class="relative">
+                    <pre class="bg-gray-900 p-4 rounded-md text-left">
+<code id="code3">
+#include &lt;stdio.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
+
+int main() {
+    const char *filename = "example.txt";  // Hardcoded filename
+    int fd = open(filename, O_RDONLY);
+
+    if (fd == -1) {
+        perror("Error opening file");
+        return EXIT_FAILURE;
+    }
+
+    printf("File opened successfully.\n");
+
+    // Perform operations with the file here...
+
+    // Close the file descriptor
+    if (close(fd) == -1) {
+        perror("Error closing file");
+        return EXIT_FAILURE;
+    }
+
+    printf("File closed.\n");
+
+    return EXIT_SUCCESS;
+}
+</code>
+                    </pre>
+                    <button onclick="copyCode('code3')" class="absolute top-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Copy</button>
+                </div>
+            </div>
+            <div class="mb-10">
+                <h2 class="text-3xl mb-4 reddit-sans">Example of read </h2>
+                <div class="relative">
+                    <pre class="bg-gray-900 p-4 rounded-md text-left">
+<code id="code4">
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main() {
+    int fd;
+    char buffer[100];
+    ssize_t bytesRead;
+
+    // Open a file
+    fd = open("example.txt", O_RDONLY);
+    if (fd == -1) {
+        perror("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    // Read from the file
+    bytesRead = read(fd, buffer, sizeof(buffer) - 1);
+    if (bytesRead == -1) {
+        perror("Failed to read file");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+    buffer[bytesRead] = '\0'; // Null-terminate the string
+
+    // Print what we read
+    printf("Read from file: %s\n", buffer);
+
+    // Close the file
+    if (close(fd) == -1) {
+        perror("Failed to close file");
+        exit(EXIT_FAILURE);
+    }
+
+    return 0;
+}
+</code>
+                    </pre>
+                    <button onclick="copyCode('code4')" class="absolute top-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

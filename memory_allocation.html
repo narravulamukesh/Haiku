@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Allocation in Haiku OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .reddit-sans{
+            font-family: "Reddit Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+          }
+
+    </style>
+    <script>
+        function initialize() {
+            document.getElementById('logoButton').onclick = function() {
+                window.location.href = 'home.html';
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', initialize);
+
+        function copyCode() {
+            const codeElement = document.getElementById('code');
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // to deselect
+            alert("Code copied to clipboard!");
+        }
+    </script>
+</head>
+<body class="bg-blue-900 text-white h-screen">
+    <div class="flex h-full">
+        <!-- Side Navigation Bar -->
+        <div class="bg-gray-800 text-white w-64 h-full flex flex-col justify-between">
+            <div>
+                <!-- Header -->
+                <div class="p-4">
+                    <img src="haiku_logo_white.svg" alt="Haiku Logo" class="w-32 mx-auto cursor-pointer" id="logoButton">
+                </div>
+                <!-- Navigation Links -->
+                <nav class="p-4">
+                    <ul>
+                        <li><a href="#" class="block py-4 hover:bg-gray-700 rounded">Installation Guide</a></li>
+                        <li><a href="system_calls.html" class="block py-4 hover:bg-gray-700 rounded">System Call</a></li>
+                        <li><a href="scheduling_algorithm.html" class="block py-4 hover:bg-gray-700 rounded">Scheduling Algorithm</a></li>
+                        <li><a href="memory_allocation.html" class="block py-4 hover:bg-gray-700 rounded">Memory Allocation</a></li>
+                        <li><a href="process.html" class="block py-4 hover:bg-gray-700 rounded">Process Synchronization</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10 glass-effect overflow-y-auto">
+            <div class="text-center mb-10">
+                <h1 class="font-bold text-5xl mb-6 reddit-sans">Memory Allocation</h1>
+                <hr>
+            </div>
+            <h1 class="font-bold text-5xl mb-4 reddit-sans">Memory Allocation Algorithm Code:</h1>
+            <div class="relative">
+                <pre class="bg-gray-900 p-4 rounded-md text-left" id="code">
+<code>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt; 
+
+typedef struct MemoryChunk {
+    void* base;             
+    size_t size;            
+    struct MemoryChunk* next;
+} MemoryChunk;
+
+#define SMALL_POOL 0
+#define MEDIUM_POOL 1
+#define LARGE_POOL 2
+#define XLARGE_POOL 3
+#define NUM_POOLS 4
+
+MemoryChunk* free_pools[NUM_POOLS] = {NULL};
+
+void* hoard_malloc(size_t size) {
+    const char* pool_names[NUM_POOLS] = {"SMALL_POOL", "MEDIUM_POOL", "LARGE_POOL", "XLARGE_POOL"};
+    
+    int pool_index = 0;
+    
+    if (size <= 16) {
+        pool_index = SMALL_POOL;
+    } else if (size <= 64) {
+        pool_index = MEDIUM_POOL;
+    } else if (size <= 256) {
+        pool_index = LARGE_POOL;
+    } else {
+        pool_index = XLARGE_POOL;
+    }
+
+    printf("Allocating memory of size %zu from pool %s\n", size, pool_names[pool_index]);
+
+    MemoryChunk* current = free_pools[pool_index];
+    while (current != NULL) {
+        if (current->size >= size) {
+            free_pools[pool_index] = current->next;
+            return current->base;
+        }
+        current = current->next;
+    }
+
+    printf("Hoard requesting more memory from VM for size %zu\n", size);
+
+    void* vm_allocated_memory = malloc(size);
+    if (vm_allocated_memory == NULL) {
+        printf("VM allocation failed!\n");
+        return NULL;
+    }
+    printf("VM allocation success\n");
+
+    void* virtual_address = vm_allocated_memory;
+
+    MemoryChunk* chunk = (MemoryChunk*)malloc(sizeof(MemoryChunk));
+    if (chunk == NULL) {
+        free(vm_allocated_memory);
+        return NULL;
+    }
+    chunk->base = virtual_address;
+    chunk->size = size;
+    chunk->next = NULL;
+    free_pools[pool_index] = chunk;
+
+    return virtual_address;
+}
+
+void hoard_free(void* ptr) {
+    // Implementation of free logic
+}
+
+int main() {
+    void* ptr1 = hoard_malloc(10);
+    void* ptr2 = hoard_malloc(20);
+    void* ptr3 = hoard_malloc(100);
+    void* ptr4 = hoard_malloc(300);
+
+    hoard_free(ptr1);
+    hoard_free(ptr2);
+    hoard_free(ptr3);
+    hoard_free(ptr4);
+
+    return 0;
+}
+</code>
+                </pre>
+                <button onclick="copyCode()" class="absolute top-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Copy</button>
+            </div>
+            <h1 class="font-bold text-5xl mb-4 reddit-sans">Output:</h1>
+            <img src="output_m.jpeg" alt="Output Screenshot" class="w-full mt-6">
+            
+        </div>
+    </div>
+</body>
+</html>

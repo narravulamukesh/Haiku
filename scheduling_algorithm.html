@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Calls in Haiku OS</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .reddit-sans{
+            font-family: "Reddit Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 700;
+            font-style: normal;
+          }
+    </style>
+    <script>
+        function initialize() {
+            document.getElementById('logoButton').onclick = function() {
+                window.location.href = 'home.html';
+            };
+        }
+    
+        document.addEventListener('DOMContentLoaded', initialize);
+        
+        function copyCode() {
+            const codeElement = document.getElementById('code');
+            const range = document.createRange();
+            range.selectNode(codeElement);
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // to deselect
+            alert("Code copied to clipboard!");
+        }
+    </script>
+</head>
+<body class="bg-blue-900 text-white h-screen">
+    <div class="flex h-full">
+        <!-- Side Navigation Bar -->
+        <div class="bg-gray-800 text-white w-64 h-full flex flex-col justify-between">
+            <div>
+                <!-- Header -->
+                <div class="p-4">
+                    <img src="haiku_logo_white.svg" alt="Haiku Logo" class="w-32 mx-auto cursor-pointer" id="logoButton">
+                </div>
+                <!-- Navigation Links -->
+                <nav class="p-4">
+                    <ul>
+                        <li><a href="command.html" class="block py-4 hover:bg-gray-700 rounded">Basic Commands</a></li>
+                        <li><a href="system_calls.html" class="block py-4 hover:bg-gray-700 rounded">System Call</a></li>
+                        <li><a href="scheduling_algorithm.html" class="block py-4 hover:bg-gray-700 rounded">Scheduling Algorithm</a></li>
+                        <li><a href="memory_allocation.html" class="block py-4 hover:bg-gray-700 rounded">Memory Allocation</a></li>
+                        <li><a href="process.html" class="block py-4 hover:bg-gray-700 rounded">Process Synchronization</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10 glass-effect overflow-y-auto">
+            <div class="text-center mb-10">
+                <h1 class="font-bold text-5xl mb-6 reddit-sans">Scheduling Algorithm</h1>
+                <hr>
+            </div>
+            <h1 class="font-bold text-5xl mb-5 reddit-sans">Scheduling Algorithm Code:</h1>
+            <div class="relative">
+                
+                <pre class="bg-gray-900 p-4 rounded-md text-left" id="code">
+                    
+<code>
+qu = []
+rl = []
+flag = 0
+wt = 0
+tat = 0
+gantt = ""
+
+class Roundrobin:
+    def __init__(self, i, at, bt):
+        self.pid = i
+        self.at = at
+        self.bt = bt
+        self.rt = bt
+
+n = int(input("Enter the number of processes: "))
+remain = n
+process = []
+for i in range(n):
+    print("Process", i + 1)
+    at = int(input("Enter arrival time: "))
+    bt = int(input("Enter burst time: "))
+    process.append(Roundrobin(i + 1, at, bt))
+qt = int(input("Enter time slice: "))
+dl = process.copy()
+t = 0
+cnt = 0
+while remain != 0:
+    if len(dl) != 0:
+        for i in dl:
+            if i.at <= t:
+                qu.append(i)
+        to_remove = []
+        for z in qu:
+            to_remove.append(z)
+        for element in to_remove:
+            if element in dl:
+                dl.remove(element)
+        if len(qu) != 0:
+            a = qu.pop(0)
+            if a.rt <= qt and a.rt > 0:
+                gantt += "P" + str(a.pid) + "|"
+                t += a.rt
+                a.rt = 0
+                remain -= 1
+                wt += t - a.at - a.bt
+                tat += t - a.at
+            elif a.rt > 0:
+                gantt += "P" + str(a.pid) + "|"
+                a.rt -= qt
+                t += qt
+                for j in dl:
+                    if j.at <= t:
+                        qu.append(j)
+                to_remove = []
+                for y in qu:
+                    to_remove.append(y)
+                for element in to_remove:
+                    if element in dl:
+                        dl.remove(element)
+                qu.append(a)
+        else:
+            t += 1
+print("-" * len(gantt))
+print(gantt)
+print("-" * len(gantt))
+print("Average Waiting Time = ", wt * 1.0 / n)
+print("Avg Turnaround Time = ", tat * 1.0 / n)
+</code>
+                </pre>
+                <button onclick="copyCode()" class="absolute top-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Copy</button>
+            </div>
+            <h1 class="font-bold text-5xl mb-5 reddit-sans">Output:</h1>
+            <img src="output_s.jpeg" alt="Output Screenshot" class="w-full mt-6">
+        </div>
+    </div>
+</body>
+</html>
